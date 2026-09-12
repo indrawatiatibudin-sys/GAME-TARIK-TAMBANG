@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarik Tambang - Descriptive Text | SMK Kelas 10</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+
+        .score-item {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .score-item h3 {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            opacity: 0.9;
+        }
+
+        .score-item .score {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        /* Game Arena */
+        .game-arena {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        /* Tug of War Visual */
+        .tug-war-container {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .ground {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(to bottom, #8BC34A, #689F38);
+            border-radius: 5px;
+        }
+
+        .center-line {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 140px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 2px;
+        }
+
+        .center-line::after {
+            content: '▼';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: red;
+            font-size: 1.2em;
+        }
+
+        .rope {
+            position: absolute;
+            bottom: 80px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: repeating-linear-gradient(
+                90deg,
+                #8B4513 0px,
+                #8B4513 10px,
+                #A0522D 10px,
+                #A0522D 20px
+            );
+            border-radius: 4px;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .rope-flag {
+            position: absolute;
+            bottom: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 30px;
+            background: red;
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+            transition: left 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .team {
+            position: absolute;
+            bottom: 45px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .team-left {
+            left: 5%;
+        }
+
+        .team-right {
+            right: 5%;
+        }
+
+        .team-icon {
+            font-size: 3em;
+            margin-bottom: 5px;
+        }
+
+        .team-label {
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #333;
+            background: rgba(255,255,255,0.9);
+            padding: 3px 10px;
+            border-radius: 10px;
+        }
+
+        .person {
+            display: inline-block;
+            font-size: 2em;
+            margin: 0 -5px;
+        }
+
+        /* Question Area */
+        .question-area {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            padding: 15px 20px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            font-size: 1em;
+            text-align: left;
+            transition: all 0.3s ease;
+            color: #333;
+        }
+
+        .option-btn:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+            transform: translateX(5px);
+        }
+
+        .option-btn.correct {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+            color: #2e7d32;
+            animation: pulse 0.5s;
+        }
+
+        .option-btn.wrong {
+            border-color: #f44336;
+            background: #ffebee;
+            color: #c62828;
+            animation: shake 0.5s;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Feedback */
+        .feedback {
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+            display: none;
+        }
+
+        .feedback.correct {
+            display: block;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #4CAF50;
+        }
+
+        .feedback.wrong {
+            display: block;
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+
+        /* Result Screen */
+        .result-screen {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .result-screen.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .result-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 2em;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .result-message {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .result-score {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .btn-restart {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-restart:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .progress-text {
+            color: white;
+            text-align: center;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        /* Start Screen */
+        .start-screen {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .start-screen h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .start-screen p {
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .rules-box {
+            background: #f5f7fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .rules-box h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .rules-box ul {
+            padding-left: 20px;
+            color: #555;
+        }
+
+        .rules-box li {
+            margin-bottom: 8px;
+        }
+
+        .btn-start {
+            padding: 18px 50px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+            margin-top: 20px;
+        }
+
+        .btn-start:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(76, 175, 80, 0.6);
+        }
+
+        /* Confetti */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            top: -10px;
+            width: 10px;
+            height: 10px;
+            animation: confettiFall 3s linear forwards;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5em; }
+            .game-arena { padding: 15px; }
+            .tug-war-container { height: 150px; }
+            .team-icon { font-size: 2em; }
+            .person { font-size: 1.5em; }
+            .question-text { font-size: 1em; }
+            .option-btn { padding: 12px 15px; font-size: 0.9em; }
+        }
+    </style>
+</head>
+<body>
+    <h1>🪢 Tarik Tambang 🪢</h1>
+    <p class="subtitle">Descriptive Text - SMK Kelas 10</p>
+
+    <div class="progress-container" id="progressContainer" style="display:none;">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p class="progress-text" id="progressText">Soal 1 dari 5</p>
+    </div>
+
+    <div class="score-board" id="scoreBoard" style="display:none;">
+        <div class="score-item">
+            <h3>👨‍🎓 Siswa (Tim Kiri)</h3>
+            <div class="score" id="studentScore">0</div>
+        </div>
+        <div class="score-item">
+            <h3>🤖 Komputer (Tim Kanan)</h3>
+            <div class="score" id="computerScore">0</div>
+        </div>
+    </div>
+
+    <div class="game-arena">
+        <!-- Tug of War Visual -->
+        <div class="tug-war-container" id="tugWarContainer">
+            <div class="center-line"></div>
+            <div class="ground"></div>
+            <div class="rope" id="rope"></div>
+            <div class="rope-flag" id="ropeFlag"></div>
+            
+            <div class="team team-left" id="teamLeft">
+                <div class="team-icon">👨‍🎓</div>
+                <div>
+                    <span class="person">🧑</span>
+                    <span class="person">🧑</span>
+                    <span class="person">🧑</span>
+                </div>
+                <span class="team-label">SISWA</span>
+            </div>
+            
+            <div class="team team-right" id="teamRight">
+                <div class="team-icon">🤖</div>
+                <div>
+                    <span class="person">🤖</span>
+                    <span class="person">🤖</span>
+                    <span class="person">🤖</span>
+                </div>
+                <span class="team-label">KOMPUTER</span>
+            </div>
+        </div>
+
+        <!-- Start Screen -->
+        <div class="start-screen" id="startScreen">
+            <h2>🏆 Selamat Datang di Game Tarik Tambang!</h2>
+            <p>Uji pemahamanmu tentang <strong>Descriptive Text</strong> melalui permainan tarik tambang yang seru!</p>
+            
+            <div class="rules-box">
+                <h4>📋 Aturan Permainan:</h4>
+                <ul>
+                    <li>Kamu adalah <strong>Tim Kiri (Siswa)</strong> melawan <strong>Tim Kanan (Komputer)</strong></li>
+                    <li>Terdapat <strong>5 pertanyaan</strong> tentang Descriptive Text</li>
+                    <li>Jawab <strong>BENAR</strong> → Tali bergerak ke kiri (kamu menang ronde)</li>
+                    <li>Jawab <strong>SALAH</strong> → Tali bergerak ke kanan (komputer menang ronde)</li>
+                    <li>Jawab <strong>SEMUA BENAR</strong> → Kamu MENANG! 🎉</li>
+                </ul>
+            </div>
+            
+            <button class="btn-start" onclick="startGame()">🎮 MULAI BERMAIN</button>
+        </div>
+
+        <!-- Question Area -->
+        <div class="question-area" id="questionArea" style="display:none;">
+            <span class="question-number" id="questionNumber">Soal 1</span>
+            <p class="question-text" id="questionText"></p>
+            <div class="options" id="optionsContainer"></div>
+            <div class="feedback" id="feedback"></div>
+        </div>
+
+        <!-- Result Screen -->
+        <div class="result-screen" id="resultScreen">
+            <div class="result-icon" id="resultIcon"></div>
+            <h2 class="result-title" id="resultTitle"></h2>
+            <p class="result-message" id="resultMessage"></p>
+            <p class="result-score" id="resultScore"></p>
+            <button class="btn-restart" onclick="restartGame()">🔄 Main Lagi</button>
+        </div>
+    </div>
+
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <script>
+        // Questions about Descriptive Text
+        const questions = [
+            {
+                question: "What is the communicative purpose of a descriptive text?",
+                options: [
+                    "A. To tell a story with complications",
+                    "B. To describe a particular person, place, or thing in detail",
+                    "C. To explain how something works",
+                    "D. To persuade the reader to do something"
+                ],
+                correct: 1,
+                explanation: "Descriptive text bertujuan untuk mendeskripsikan orang, tempat, atau benda tertentu secara detail."
+            },
+            {
+                question: "What is the generic structure of a descriptive text?",
+                options: [
+                    "A. Orientation - Complication - Resolution",
+                    "B. Goal - Materials - Steps",
+                    "C. Identification - Description",
+                    "D. General Classification - Description"
+                ],
+                correct: 2,
+                explanation: "Struktur generik descriptive text adalah Identification (identifikasi) dan Description (deskripsi)."
+            },
+            {
+                question: "Which of the following texts is an example of a descriptive text?",
+                options: [
+                    "A. How to make fried rice",
+                    "B. My holiday in Bali last summer",
+                    "C. My beloved cat, Mimi",
+                    "D. Why smoking is dangerous"
+                ],
+                correct: 2,
+                explanation: "'My beloved cat, Mimi' adalah descriptive text karena mendeskripsikan kucing secara spesifik."
+            },
+            {
+                question: "What language feature is commonly used in descriptive text?",
+                options: [
+                    "A. Simple Past Tense",
+                    "B. Simple Present Tense and adjectives",
+                    "C. Past Continuous Tense",
+                    "D. Imperative sentences"
+                ],
+                correct: 1,
+                explanation: "Descriptive text menggunakan Simple Present Tense dan banyak kata sifat (adjectives) untuk menggambarkan objek."
+            },
+            {
+                question: "Read the following sentence: 'Borobudur Temple is a magnificent Buddhist temple located in Central Java.' What does the word 'magnificent' mean?",
+                options: [
+                    "A. Small and ordinary",
+                    "B. Very beautiful and impressive",
+                    "C. Old and broken",
+                    "D. Dark and scary"
+                ],
+                correct: 1,
+                explanation: "'Magnificent' berarti sangat indah dan mengesankan (very beautiful and impressive)."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let studentScore = 0;
+        let computerScore = 0;
+        let ropePosition = 0; // -2 to +2, negative = left wins
+
+        function startGame() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('questionArea').style.display = 'block';
+            document.getElementById('scoreBoard').style.display = 'flex';
+            document.getElementById('progressContainer').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= questions.length) {
+                showResult();
+                return;
+            }
+
+            const q = questions[currentQuestion];
+            document.getElementById('questionNumber').textContent = `Soal ${currentQuestion + 1}`;
+            document.getElementById('questionText').textContent = q.question;
+            document.getElementById('progressText').textContent = `Soal ${currentQuestion + 1} dari ${questions.length}`;
+            document.getElementById('progressFill').style.width = `${(currentQuestion / questions.length) * 100}%`;
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = option;
+                btn.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('feedback').style.display = 'none';
+            document.getElementById('feedback').className = 'feedback';
+        }
+
+        function selectAnswer(selectedIndex) {
+            const q = questions[currentQuestion];
+            const buttons = document.querySelectorAll('.option-btn');
+            const feedback = document.getElementById('feedback');
+
+            // Disable all buttons
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selectedIndex === q.correct) {
+                // Correct answer - rope moves left (student wins)
+                buttons[selectedIndex].classList.add('correct');
+                studentScore++;
+                ropePosition--;
+                feedback.textContent = `✅ BENAR! ${q.explanation}`;
+                feedback.className = 'feedback correct';
+                document.getElementById('studentScore').textContent = studentScore;
+            } else {
+                // Wrong answer - rope moves right (computer wins)
+                buttons[selectedIndex].classList.add('wrong');
+                buttons[q.correct].classList.add('correct');
+                computerScore++;
+                ropePosition++;
+                feedback.textContent = `❌ SALAH! ${q.explanation}`;
+                feedback.className = 'feedback wrong';
+                document.getElementById('computerScore').textContent = computerScore;
+            }
+
+            // Update rope position visually
+            updateRopePosition();
+
+            // Move to next question after delay
+            setTimeout(() => {
+                currentQuestion++;
+                loadQuestion();
+            }, 2500);
+        }
+
+        function updateRopePosition() {
+            const rope = document.getElementById('rope');
+            const flag = document.getElementById('ropeFlag');
+            const teamLeft = document.getElementById('teamLeft');
+            const teamRight = document.getElementById('teamRight');
+
+            // Each position = 60px movement
+            const offset = ropePosition * 60;
+            
+            // Move rope and flag
+            rope.style.transform = `translateX(${offset}px)`;
+            flag.style.left = `calc(50% + ${offset}px)`;
+
+            // Move teams slightly
+            teamLeft.style.transform = `translateX(${ropePosition * 15}px)`;
+            teamRight.style.transform = `translateX(${ropePosition * -15}px)`;
+        }
+
+        function showResult() {
+            document.getElementById('questionArea').style.display = 'none';
+            document.getElementById('progressFill').style.width = '100%';
+            document.getElementById('progressText').textContent = 'Selesai!';
+
+            const resultScreen = document.getElementById('resultScreen');
+            const resultIcon = document.getElementById('resultIcon');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultMessage = document.getElementById('resultMessage');
+            const resultScore = document.getElementById('resultScore');
+
+            if (studentScore === 5) {
+                // Perfect score - Student wins!
+                resultIcon.textContent = '🏆';
+                resultTitle.textContent = 'KAMU MENANG! 🎉';
+                resultTitle.style.color = '#4CAF50';
+                resultMessage.textContent = 'Luar biasa! Kamu menjawab semua pertanyaan dengan benar! Tali berhasil ditarik sepenuhnya ke sisimu!';
+                createConfetti();
+            } else if (studentScore > computerScore) {
+                resultIcon.textContent = '🎊';
+                resultTitle.textContent = 'KAMU MENANG!';
+                resultTitle.style.color = '#4CAF50';
+                resultMessage.textContent = 'Hebat! Kamu berhasil mengalahkan komputer! Terus belajar ya!';
+                createConfetti();
+            } else if (studentScore === computerScore) {
+                resultIcon.textContent = '🤝';
+                resultTitle.textContent = 'SERI!';
+                resultTitle.style.color = '#FF9800';
+                resultMessage.textContent = 'Pertandingan berakhir seri! Coba lagi untuk memenangkan tarik tambang!';
+            } else {
+                resultIcon.textContent = '😢';
+                resultTitle.textContent = 'KOMPUTER MENANG';
+                resultTitle.style.color = '#f44336';
+                resultMessage.textContent = 'Jangan menyerah! Pelajari kembali materi Descriptive Text dan coba lagi!';
+            }
+
+            resultScore.textContent = `Skor Akhir: Siswa ${studentScore} - ${computerScore} Komputer`;
+            resultScreen.classList.add('show');
+        }
+
+        function createConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ff8800', '#88ff00'];
+            
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = Math.random() * 10 + 5 + 'px';
+                    confetti.style.height = Math.random() * 10 + 5 + 'px';
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    confetti.style.animationDuration = Math.random() * 2 + 2 + 's';
+                    container.appendChild(confetti);
+
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 30);
+            }
+        }
+
+        function restartGame() {
+            currentQuestion = 0;
+            studentScore = 0;
+            computerScore = 0;
+            ropePosition = 0;
+
+            document.getElementById('studentScore').textContent = '0';
+            document.getElementById('computerScore').textContent = '0';
+            document.getElementById('resultScreen').classList.remove('show');
+            document.getElementById('questionArea').style.display = 'block';
+            document.getElementById('progressFill').style.width = '0%';
+
+            // Reset rope position
+            document.getElementById('rope').style.transform = 'translateX(0)';
+            document.getElementById('ropeFlag').style.left = '50%';
+            document.getElementById('teamLeft').style.transform = 'translateX(0)';
+            document.getElementById('teamRight').style.transform = 'translateX(0)';
+
+            // Clear confetti
+            document.getElementById('confettiContainer').innerHTML = '';
+
+            loadQuestion();
+        }
+    </script>
+</body>
+</html>
